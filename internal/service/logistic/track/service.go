@@ -1,15 +1,27 @@
-package subdomain
+package track
 
-type Service struct{}
+import "github.com/bars-p/omp-bot/internal/model/logistic"
 
-func NewService() *Service {
-	return &Service{}
+
+type TrackService interface {
+	Describe(trackID uint64) (*logistic.Track, error)
+	List(cursor, limit uint64) ([]logistic.Track, error)
+	Create(logistic.Track) (uint64, error)
+	Update(trackID uint64, track logistic.Track) error
+	Remove(trackID uint64) (bool, error)
 }
 
-func (s *Service) List() []Subdomain {
-	return allEntities
+
+type DummyTrackService struct{}
+
+func NewDummyTrackService() *DummyTrackService {
+	return &DummyTrackService{}
 }
 
-func (s *Service) Get(idx int) (*Subdomain, error) {
+func (dts *DummyTrackService) Describe(idx int) (*logistic.Track, error) {
 	return &allEntities[idx], nil
+}
+
+func (dts *DummyTrackService) List() []logistic.Track {
+	return allEntities
 }

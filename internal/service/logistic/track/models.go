@@ -1,6 +1,10 @@
-package subdomain
+package track
 
-var allEntities = []Subdomain{
+import "github.com/bars-p/omp-bot/internal/model/logistic"
+
+
+
+var allEntities = []logistic.Track{
 	{Title: "one"},
 	{Title: "two"},
 	{Title: "three"},
@@ -8,6 +12,6 @@ var allEntities = []Subdomain{
 	{Title: "five"},
 }
 
-type Subdomain struct {
-	Title string
-}
+// type Subdomain struct {
+// 	Title string
+// }
