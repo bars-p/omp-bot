@@ -16,44 +16,44 @@ type TrackCommander interface {
 	List(inputMsg *tgbotapi.Message)
 	Delete(inputMsg *tgbotapi.Message)
 
-	New(inputMsg *tgbotapi.Message) // return error not implemented
+	New(inputMsg *tgbotapi.Message)  // return error not implemented
 	Edit(inputMsg *tgbotapi.Message) // return error not implemented
 }
 
 type DummyTrackCommander struct {
-	bot              *tgbotapi.BotAPI
-	trackService *service.Service
+	bot          *tgbotapi.BotAPI
+	trackService service.TrackService
 }
 
 func NewDummyTrackCommander(
 	bot *tgbotapi.BotAPI,
 ) *DummyTrackCommander {
-	trackService := service.NewService()
+	trackService := service.NewDummyTrackService()
 
 	return &DummyTrackCommander{
-		bot:              bot,
-		trackService: &trackService,
+		bot:          bot,
+		trackService: trackService,
 	}
 }
 
-func (c *DemoSubdomainCommander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+func (dtc *DummyTrackCommander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	switch callbackPath.CallbackName {
 	case "list":
-		c.CallbackList(callback, callbackPath)
+		dtc.CallbackList(callback, callbackPath)
 	default:
 		log.Printf("DemoSubdomainCommander.HandleCallback: unknown callback name: %s", callbackPath.CallbackName)
 	}
 }
 
-func (c *DemoSubdomainCommander) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
+func (dtc *DummyTrackCommander) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
 	switch commandPath.CommandName {
 	case "help":
-		c.Help(msg)
+		dtc.Help(msg)
 	case "list":
-		c.List(msg)
+		dtc.List(msg)
 	case "get":
-		c.Get(msg)
+		dtc.Get(msg)
 	default:
-		c.Default(msg)
+		dtc.Default(msg)
 	}
 }

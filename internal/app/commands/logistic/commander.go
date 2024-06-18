@@ -30,19 +30,19 @@ func NewDummyCommander(
 	}
 }
 
-func (c *DummyCommander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+func (dc *DummyCommander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	switch callbackPath.Subdomain {
 	case "track":
-		c.trackCommander.HandleCallback(callback, callbackPath)
+		dc.trackCommander.HandleCallback(callback, callbackPath)
 	default:
 		log.Printf("DummyCommander.HandleCallback: unknown subdomain - %s", callbackPath.Subdomain)
 	}
 }
 
-func (c *DummyCommander) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
+func (dc *DummyCommander) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
 	switch commandPath.Subdomain {
 	case "track":
-		c.trackCommander.HandleCommand(msg, commandPath)
+		dc.trackCommander.HandleCommand(msg, commandPath)
 	default:
 		log.Printf("DummyCommander.HandleCommand: unknown subdomain - %s", commandPath.Subdomain)
 	}

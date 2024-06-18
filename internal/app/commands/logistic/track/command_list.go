@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"log"
 
+	"github.com/bars-p/omp-bot/internal/app/path"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"github.com/ozonmp/omp-bot/internal/app/path"
 )
 
-func (c *DemoSubdomainCommander) List(inputMessage *tgbotapi.Message) {
+func (dtc *DummyTrackCommander) List(inputMessage *tgbotapi.Message) {
 	outputMsgText := "Here all the products: \n\n"
 
-	products := c.subdomainService.List()
+	products, _ := dtc.trackService.List(0, 0)
 	for _, p := range products {
 		outputMsgText += p.Title
 		outputMsgText += "\n"
@@ -24,8 +24,8 @@ func (c *DemoSubdomainCommander) List(inputMessage *tgbotapi.Message) {
 	})
 
 	callbackPath := path.CallbackPath{
-		Domain:       "demo",
-		Subdomain:    "subdomain",
+		Domain:       "logistic",
+		Subdomain:    "track",
 		CallbackName: "list",
 		CallbackData: string(serializedData),
 	}
@@ -36,7 +36,7 @@ func (c *DemoSubdomainCommander) List(inputMessage *tgbotapi.Message) {
 		),
 	)
 
-	_, err := c.bot.Send(msg)
+	_, err := dtc.bot.Send(msg)
 	if err != nil {
 		log.Printf("DemoSubdomainCommander.List: error sending reply message to chat - %v", err)
 	}
