@@ -8,5 +8,12 @@ type Track struct {
 }
 
 func (t *Track) String() string {
-	return fmt.Sprintf("Package: [%d] %s", t.ID, t.Title)
+	return fmt.Sprintf("Track: [%d] %s", t.ID, t.Title)
+}
+
+func NewTrack(id uint64, title string) Track {
+	return Track{
+		ID: id,
+		Title: title,
+	}
 }

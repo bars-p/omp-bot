@@ -19,7 +19,7 @@ type Router struct {
 	bot *tgbotapi.BotAPI
 
 	// demoCommander
-	demoCommander Commander
+	// demoCommander Commander
 	// user
 	// access
 	// buy
@@ -42,7 +42,8 @@ type Router struct {
 	// rating
 	// security
 	// cinema
-	// logistic
+	// logistic 
+	logisticCommander Commander
 	// product
 	// education
 }
@@ -54,7 +55,7 @@ func NewRouter(
 		// bot
 		bot: bot,
 		// demoCommander
-		demoCommander: logistic.NewDummyCommander(bot),
+		// demoCommander: logistic.NewDummyCommander(bot),
 		// user
 		// access
 		// buy
@@ -77,7 +78,8 @@ func NewRouter(
 		// rating
 		// security
 		// cinema
-		// logistic
+		// logistic: 
+		logisticCommander: logistic.NewLogisticCommander(bot),
 		// product
 		// education
 	}
@@ -99,6 +101,9 @@ func (c *Router) HandleUpdate(update tgbotapi.Update) {
 }
 
 func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
+
+	log.Printf("CALLBACK EVENT: %s", callback.Data)
+	
 	callbackPath, err := path.ParseCallback(callback.Data)
 	if err != nil {
 		log.Printf("Router.handleCallback: error parsing callback data `%s` - %v", callback.Data, err)
@@ -107,7 +112,7 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 
 	switch callbackPath.Domain {
 	case "demo":
-		c.demoCommander.HandleCallback(callback, callbackPath)
+		break
 	case "user":
 		break
 	case "access":
@@ -153,7 +158,7 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 	case "cinema":
 		break
 	case "logistic":
-		break
+		c.logisticCommander.HandleCallback(callback, callbackPath)
 	case "product":
 		break
 	case "education":
@@ -164,6 +169,9 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 }
 
 func (c *Router) handleMessage(msg *tgbotapi.Message) {
+
+	log.Printf("MESSAGE EVENT: %s", msg.Text)
+	
 	if !msg.IsCommand() {
 		c.showCommandFormat(msg)
 
@@ -172,13 +180,13 @@ func (c *Router) handleMessage(msg *tgbotapi.Message) {
 
 	commandPath, err := path.ParseCommand(msg.Command())
 	if err != nil {
-		log.Printf("Router.handleCallback: error parsing callback data `%s` - %v", msg.Command(), err)
+		log.Printf("Router.handleMessage: error parsing callback data `%s` - %v", msg.Command(), err)
 		return
 	}
 
 	switch commandPath.Domain {
 	case "demo":
-		c.demoCommander.HandleCommand(msg, commandPath)
+		break
 	case "user":
 		break
 	case "access":
@@ -224,7 +232,7 @@ func (c *Router) handleMessage(msg *tgbotapi.Message) {
 	case "cinema":
 		break
 	case "logistic":
-		break
+		c.logisticCommander.HandleCommand(msg, commandPath)
 	case "product":
 		break
 	case "education":

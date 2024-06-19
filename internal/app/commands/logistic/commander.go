@@ -6,8 +6,6 @@ import (
 	"github.com/bars-p/omp-bot/internal/app/commands/logistic/track"
 	"github.com/bars-p/omp-bot/internal/app/path"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	// "github.com/ozonmp/omp-bot/internal/app/commands/demo/subdomain"
-	// "github.com/ozonmp/omp-bot/internal/app/path"
 )
 
 type Commander interface {
@@ -15,36 +13,34 @@ type Commander interface {
 	HandleCommand(message *tgbotapi.Message, commandPath path.CommandPath)
 }
 
-type DummyCommander struct {
-	bot                *tgbotapi.BotAPI
+type LogisticCommander struct {
+	bot            *tgbotapi.BotAPI
 	trackCommander Commander
 }
 
-func NewDummyCommander(
+func NewLogisticCommander(
 	bot *tgbotapi.BotAPI,
-) *DummyCommander {
-	return &DummyCommander{
-		bot: bot,
-		// subdomainCommander
-		trackCommander: track.NewDummyTrackCommander(bot),
+) *LogisticCommander {
+	return &LogisticCommander{
+		bot:            bot,
+		trackCommander: track.NewTrackCommander(bot),
 	}
 }
 
-func (dc *DummyCommander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+func (lc *LogisticCommander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	switch callbackPath.Subdomain {
 	case "track":
-		dc.trackCommander.HandleCallback(callback, callbackPath)
+		lc.trackCommander.HandleCallback(callback, callbackPath)
 	default:
-		log.Printf("DummyCommander.HandleCallback: unknown subdomain - %s", callbackPath.Subdomain)
+		log.Printf("LogisticCommander.HandleCallback: unknown subdomain - %s", callbackPath.Subdomain)
 	}
 }
 
-func (dc *DummyCommander) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
+func (lc *LogisticCommander) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
 	switch commandPath.Subdomain {
 	case "track":
-		dc.trackCommander.HandleCommand(msg, commandPath)
+		lc.trackCommander.HandleCommand(msg, commandPath)
 	default:
-		log.Printf("DummyCommander.HandleCommand: unknown subdomain - %s", commandPath.Subdomain)
+		log.Printf("LogisticCommander.HandleCommand: unknown subdomain - %s", commandPath.Subdomain)
 	}
 }
-

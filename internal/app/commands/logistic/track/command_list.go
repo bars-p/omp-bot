@@ -8,12 +8,12 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func (dtc *DummyTrackCommander) List(inputMessage *tgbotapi.Message) {
-	outputMsgText := "Here all the products: \n\n"
+func (tc *TrackCommander) List(inputMessage *tgbotapi.Message) {
+	outputMsgText := "Here all the items: \n\n"
 
-	products, _ := dtc.trackService.List(0, 0)
+	products, _ := tc.trackService.List(0, 0)
 	for _, p := range products {
-		outputMsgText += p.Title
+		outputMsgText += p.String()
 		outputMsgText += "\n"
 	}
 
@@ -36,8 +36,8 @@ func (dtc *DummyTrackCommander) List(inputMessage *tgbotapi.Message) {
 		),
 	)
 
-	_, err := dtc.bot.Send(msg)
+	_, err := tc.bot.Send(msg)
 	if err != nil {
-		log.Printf("DemoSubdomainCommander.List: error sending reply message to chat - %v", err)
+		log.Printf("TrackCommander.List: error sending reply message to chat - %v", err)
 	}
 }

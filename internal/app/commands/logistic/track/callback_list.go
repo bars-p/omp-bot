@@ -13,11 +13,11 @@ type CallbackListData struct {
 	Offset int `json:"offset"`
 }
 
-func (dtc *DummyTrackCommander) CallbackList(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+func (tc *TrackCommander) CallbackList(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	parsedData := CallbackListData{}
 	err := json.Unmarshal([]byte(callbackPath.CallbackData), &parsedData)
 	if err != nil {
-		log.Printf("DummyTrackCommander.CallbackList: "+
+		log.Printf("TrackCommander.CallbackList: "+
 			"error reading json data for type CallbackListData from "+
 			"input string %v - %v", callbackPath.CallbackData, err)
 		return
@@ -26,8 +26,8 @@ func (dtc *DummyTrackCommander) CallbackList(callback *tgbotapi.CallbackQuery, c
 		callback.Message.Chat.ID,
 		fmt.Sprintf("Parsed: %+v\n", parsedData),
 	)
-	_, err = dtc.bot.Send(msg)
+	_, err = tc.bot.Send(msg)
 	if err != nil {
-		log.Printf("DummyTrackCommander.CallbackList: error sending reply message to chat - %v", err)
+		log.Printf("TrackCommander.CallbackList: error sending reply message to chat - %v", err)
 	}
 }
