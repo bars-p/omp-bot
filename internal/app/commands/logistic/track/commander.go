@@ -51,6 +51,8 @@ func (tc *TrackCommander) HandleCommand(msg *tgbotapi.Message, commandPath path.
 		tc.List(msg)
 	case "get":
 		tc.Get(msg)
+	case "new":
+		tc.New(msg)
 	case "delete":
 		tc.Delete(msg)
 	default:
